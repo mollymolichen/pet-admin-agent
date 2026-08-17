@@ -1,0 +1,90 @@
+{
+  "pets": [
+    {
+      "id": 1,
+      "name": "Rosie",
+      "species": "Dog",
+      "memorialize": true,
+      "birthdate": "2012-08-15",
+      "breed": "Beagle",
+      "notes": "Rosie was a sweet and loving Beagle who brought joy to everyone she met. She loved going on walks and playing fetch in the park. Rosie had a gentle temperament and was great with children and other pets. She will be dearly missed by her family."
+    },
+    {
+      "id": 2,
+      "name": "Mishka",
+      "species": "Cat",
+      "memorialize": false,
+      "birthdate": "2023-09-15",
+      "breed": "Tabby",
+      "notes": "Mishka is a playful and curious cat with a beautiful tabby coat. She loves to explore her surroundings and is very friendly with people to the point of crawling into your skin. Mishka enjoys interactive toys and is always up for a game of chase."
+    },
+    {
+      "id": 3,
+      "name": "Chara",
+      "species": "Cat",
+      "memorialize": false,
+      "birthdate": "2013-09-15",
+      "breed": "Domestic Medium Hair",
+      "notes": "Chara is a sweet, outgoing, and affectionate cat who loves to cuddle. She has a beautiful black and white coat and bright green eyes. Chara enjoys being in your lap, meeting new people, and has lived with dogs and cats before."
+    },
+    {
+      "id": 4,
+      "name": "Sirius Black",
+      "species": "Cat",
+      "memorialize": false,
+      "birthdate": "2023-09-15",
+      "breed": "Domestic Short Hair",
+      "notes": "Sirius Black is a playful and curious kitten with a sleek black coat and striking yellow eyes. She loves to explore her surroundings and is very friendly with people. Sirius enjoys interactive toys and is always up for a game of chase."
+    },
+    {
+      "id": "54a73b45-a65b-4809-b6f8-6692d21677e1",
+      "name": "Bluey",
+      "species": "dog",
+      "memorialize": false,
+      "breed": "Australian Shepherd",
+      "birthdate": "",
+      "notes": "Adopted at 5 years old."
+    }
+  ],
+  "tasks": [
+    {
+        "pet_name": "Rosie",
+        "category": "Memorial",
+        "title": "Celebration of life",
+        "due_date": "2025-08-01",
+        "done": true
+    },
+    {
+      "pet_name": "Chara",
+      "category": "Vet Appointment",
+      "title": "Annual checkup",
+      "due_date": "2027-08-01",
+      "notes": "Ask vet about eye infection and FELV/FIV test",
+      "done": false
+    },
+    {
+      "pet_name": "Mishka",
+      "category": "Foster",
+      "title": "Return to foster family",
+      "due_date": "2026-09-15",
+      "notes": "Drive to Pacifica",
+      "done": false
+    },
+    {
+      "pet_name": "Sirius Black",
+      "category": "Foster",
+      "title": "Return to foster family",
+      "due_date": "2026-09-15",
+      "notes": "Drive to Pacifica",
+      "done": false
+    },
+    {
+      "pet_name": "Chara",
+      "category": "Dental",
+      "title": "Teeth cleaning",
+      "due_date": "2027-04-09",
+      "notes": "Needs 0.5mg gabapentin prior",
+      "done": false
+    }
+  ]
+}
