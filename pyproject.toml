@@ -1,0 +1,20 @@
+[project]
+name = "pet-admin-assistant"
+version = "0.1.0"
+description = "Managed Deep Agent for pet and task administration"
+requires-python = ">=3.11"
+dependencies = [
+    "deepagents",
+    "langchain-anthropic",
+    "langchain-google-genai",
+    "langchain-openai",
+    "managed-deepagents",
+    "python-dotenv",
+]
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+py-modules = ["agent", "pet_store"]

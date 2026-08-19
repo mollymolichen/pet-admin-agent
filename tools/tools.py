@@ -6,20 +6,20 @@ import json
 import uuid
 from pathlib import Path
 from typing import Any
+from langchain.tools import tool
 
 DATA_FILE = Path(__file__).with_name("pet_data.json")
 
 TASK_CATEGORIES = ["vaccination", "appointment", "medication", "grooming", "other"]
 
 '''
-This file contains internal functions for managing pets and their associated tasks. 
-These functions are used by the agent to perform operations such as listing pets, adding new pets, listing tasks, adding tasks, marking tasks as done, and deleting pets or tasks. 
+This file contains tools to manage pets and their associated tasks. 
+These tools are used by the agent to perform operations such as listing pets, adding new pets, listing tasks, adding tasks, marking tasks as done, and deleting pets or tasks. 
 The data is stored in a JSON file for persistence.
 '''
 
 def _empty_state() -> dict[str, Any]:
     return {"pets": [], "tasks": {}}
-
 
 def _load() -> dict[str, Any]:
     if not DATA_FILE.exists():
@@ -27,12 +27,12 @@ def _load() -> dict[str, Any]:
     with DATA_FILE.open("r", encoding="utf-8") as f:
         return json.load(f)
 
-
 def _save(state: dict[str, Any]) -> None:
     with DATA_FILE.open("w", encoding="utf-8") as f:
         json.dump(state, f, indent=2, default=str)
 
-# Internal function to list all pets in the household, used by the agent.
+# Tool to list all pets in the household, used by the agent.
+@tool(parse_docstring=True)
 def list_pets() -> list[dict[str, Any]]:
     """List all pets in the household."""
     state = _load()
@@ -54,7 +54,8 @@ def get_pet_by_name(name: str) -> dict[str, Any] | None:
             return pet
     return None
 
-# Internal function to add a pet, used by the agent.
+# Tool to add a pet, used by the agent.
+@tool(parse_docstring=True)
 def add_pet(
     name: str, species: str, memorialize: bool, breed: str = "", birthdate: str = "", notes: str = ""
 ) -> dict[str, Any]:
@@ -84,8 +85,14 @@ def add_pet(
     print(f"Congratulations on your new pet! I've added {pet['name']} to your household.")
     return pet
 
-# Internal function to delete a pet, used by the agent.
+# Tool to delete a pet, used by the agent.
+@tool(parse_docstring=True)
 def delete_pet(pet_id: str) -> bool:
+    """Delete a pet and all of its associated tasks.
+
+    Args:
+        pet_id: The unique ID of the pet to remove.
+    """
     state = _load()
     if pet_id not in state["pets"]:
         return False
@@ -97,7 +104,8 @@ def delete_pet(pet_id: str) -> bool:
     print(f"Pet with ID {pet_id} has been deleted, along with any associated tasks.")
     return True
 
-# Internal function to list tasks, used by the agent.
+# Tool to list tasks, used by the agent.
+@tool(parse_docstring=True)
 def list_tasks(
     pet_name: str | None = None,
     category: str | None = None,
@@ -134,7 +142,8 @@ def list_tasks(
 
     return tasks
 
-# Internal function to add a task, used by the agent.
+# Tool to add a task, used by the agent.
+@tool(parse_docstring=True)
 def add_task(
     pet_name: str,
     category: str,
@@ -176,7 +185,8 @@ def add_task(
     print(f"Added task '{title}' for {pet['name']} (category: {category}, due: {due_date or 'no due date'}).")
     return task
 
-# Internal function to mark a task as done or not done, used by the agent.
+# Tool to mark a task as done or not done, used by the agent.
+@tool(parse_docstring=True)
 def mark_task_done(task_id: str, done: bool = True) -> dict[str, Any] | None:
     """Mark an admin task as done (or not done).
 
@@ -195,8 +205,14 @@ def mark_task_done(task_id: str, done: bool = True) -> dict[str, Any] | None:
     print(f"Task '{task['title']}' for {task['pet_name']} marked as {'done' if done else 'not done'}.")
     return task
 
-# Internal function to delete a task, used by the agent.
+# Tool to delete a task, used by the agent.
+@tool(parse_docstring=True)
 def delete_task(task_id: str) -> bool:
+    """Delete one admin task by its unique ID.
+
+    Args:
+        task_id: The unique ID of the task to remove.
+    """
     state = _load()
     task = next((t for t in state["tasks"] if t["id"] == task_id), None)
     if task is None:
