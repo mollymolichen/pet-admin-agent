@@ -17,12 +17,21 @@ GATEWAY_BASE_URL = os.getenv(
     "GITHUB_COPILOT_API_GATEWAY_BASE_URL", "http://127.0.0.1:3030/v1"
 )
 GATEWAY_API_KEY = os.getenv("GITHUB_COPILOT_API_GATEWAY_API_KEY", "optional")
+API_KEY = os.getenv("OPENAI_API_KEY", "optional")
+
 # Provider-native web search, matched to the configured model family.
 _SEARCH_TOOLS = {
     "anthropic": {"type": "web_search_20260209", "name": "web_search", "max_uses": 5},
     "gpt": {"type": "web_search"},
     "google": {"google_search": {}},
 }
+def _search_tool_for(model_name: str) -> dict:
+    lower = model_name.lower()
+    for prefix, tool in _SEARCH_TOOLS.items():
+        if lower.startswith(prefix):
+            return tool
+    return _SEARCH_TOOLS["gpt"]
+    
 TOOL_CHOICES = (
     "list_pets",
     "add_pet",
@@ -31,46 +40,15 @@ TOOL_CHOICES = (
     "mark_task_done",
     "internet_search",
 )
-def _search_tool_for(model_name: str) -> dict:
-    lower = model_name.lower()
-    for prefix, tool in _SEARCH_TOOLS.items():
-        if lower.startswith(prefix):
-            return tool
-    return _SEARCH_TOOLS["gpt"]
 
-llm = ChatOpenAI(
-    model=DEFAULT_MODEL
-    #base_url=GATEWAY_BASE_URL,
-    #api_key=GATEWAY_API_KEY,
-    #temperature=0,
-)
-
-agent = define_deep_agent(
-    name="pet-admin-assistant",
-    model=llm,
-    tools=[list_pets, add_pet, list_tasks, add_task, mark_task_done, delete_task, _search_tool_for(DEFAULT_MODEL)],
-)
-
+# Used with Copilot API Gateway only
 '''
-Implement interactive input() prompts in pet_agent.py only if you want a form-like command-line experience. 
-For the current agent-chat approach, keep prompting conversationally through the agent rather than adding prompts inside pet_store.py.
-Example:
-    agent = create_deep_agent(
-        model=llm,
-        tools=[add_pet],
-        system_prompt=pet_admin_instructions,
-    )
-
-    result = agent.invoke({
-        "messages": [{
-            "role": "user",
-            "content": (
-                "Add Luna, a dog. Breed: Labrador. "
-                "Birthdate: 2022-05-01. Memorialize: false."
-            ),
-        }],
-        "selected_tool": "add_pet",
-    })
+llm = ChatOpenAI(
+    model=DEFAULT_MODEL,
+    base_url=GATEWAY_BASE_URL,
+    api_key=API_KEY,
+    temperature=0
+)
 '''
 
 def onboard_agent():
@@ -90,4 +68,18 @@ def onboard_agent():
         print(f"  {index}. {tool_name}")
 
 if __name__ == "__main__":
-    onboard_agent()
+    agent = define_deep_agent(
+        name="pet-admin-assistant",
+        model="openai:gpt-5.5",
+        tools=[list_pets, add_pet, list_tasks, add_task, mark_task_done, delete_task, _search_tool_for(DEFAULT_MODEL)],
+    )
+
+  """   result = agent.invoke({
+        "messages": [{
+            "role": "user",
+            "content": (
+                "Add Chara, a 10 year old Domestic Medium Hair cat."
+            ),
+        }],
+        "selected_tool": "add_pet",
+    }) """
